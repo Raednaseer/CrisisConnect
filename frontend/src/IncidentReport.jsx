@@ -8,13 +8,11 @@ const IncidentReport = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Check if the browser supports geolocation
         if (!navigator.geolocation) {
             setError('Geolocation is not supported by this browser.');
             return;
         }
 
-        // Get location and then submit the form data
         navigator.geolocation.getCurrentPosition(
             async (position) => {
                 const { latitude, longitude } = position.coords;
@@ -22,9 +20,11 @@ const IncidentReport = () => {
                 const incidentData = {
                     title,
                     description,
-                    ...(latitude && longitude && { latitude, longitude }),
+                    latitude: latitude || null,
+                    longitude: longitude || null,
                 };
-                
+
+                console.log('Sending Incident Data:', incidentData); // Log data to check structure
 
                 try {
                     const response = await fetch('http://127.0.0.1:8000/incidents/incidents/', {
@@ -43,7 +43,6 @@ const IncidentReport = () => {
                     const responseData = await response.json();
                     console.log('Incident Reported:', responseData);
 
-                    // Reset form fields after a successful submission
                     setTitle('');
                     setDescription('');
                     setError(null);
