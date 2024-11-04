@@ -1,6 +1,5 @@
-# incident/views.py
+""" # incident/views.py
 from rest_framework import viewsets
-from .models import Incident, IncidentUpdate
 from .serializers import IncidentSerializer, IncidentUpdateSerializer
 
 from rest_framework import viewsets, status
@@ -24,7 +23,7 @@ class IncidentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         # Only a victim can create an incident
-        serializer.save(reporter=self.request.user)
+        serializer.save(reporter=self.request.user) """
 
 
 """ class IncidentUpdateViewSet(viewsets.ModelViewSet):
@@ -34,3 +33,16 @@ class IncidentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(updated_by=self.request.user) """
+
+
+from rest_framework import viewsets
+from .models import Incident
+from .serializers import IncidentSerializer
+
+class IncidentViewSet(viewsets.ModelViewSet):
+    queryset = Incident.objects.all()
+    serializer_class = IncidentSerializer
+
+    def perform_create(self, serializer):
+        # Automatically set latitude and longitude from the request data
+        serializer.save()
