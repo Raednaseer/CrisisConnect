@@ -5,4 +5,9 @@ from .models import Incident
 class IncidentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Incident
-        fields = ['title', 'description', 'latitude', 'longitude']  # Include 'status' if needed
+        fields = '__all__'  
+
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Incident
+        fields = ['latitude', 'longitude'] 
