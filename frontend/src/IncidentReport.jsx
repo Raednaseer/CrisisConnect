@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import Header from './Header';
+import Footer from './Footer';
 
 const IncidentReport = () => {
     const [title, setTitle] = useState('');
@@ -8,6 +10,7 @@ const IncidentReport = () => {
     const [weatherData, setWeatherData] = useState(null);
     const [latitude, setLatitude] = useState(null);
     const [longitude, setLongitude] = useState(null);
+    
 
     // Fetch latitude and longitude on component load
     useEffect(() => {
@@ -98,7 +101,10 @@ const IncidentReport = () => {
     };
 
     return (
+        <>
+        <Header />
         <div className="min-h-screen flex">
+            
             {/* Left hand side */}
             <div className="w-full lg:w-1/2 flex items-center justify-center bg-gray-100">
                 <div className="w-full max-w-lg p-8 bg-white rounded-lg shadow-lg m-6">
@@ -163,6 +169,8 @@ const IncidentReport = () => {
                 </div>
             </div>
         </div>
+        <Footer />
+        </>
     );
 };
 

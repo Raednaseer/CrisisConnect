@@ -1,6 +1,8 @@
 // Login.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Header from './Header';
+import Footer from './Footer';
 
 function Login({ setAuth }) {
     const [username, setUsername] = useState('');
@@ -27,6 +29,8 @@ function Login({ setAuth }) {
     };
 
     return (
+        <>
+        <Header />
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
             <h2 className="text-3xl font-semibold mb-6">Login</h2>
             <form onSubmit={handleLogin} className="w-full max-w-md bg-white shadow-md rounded-lg px-8 py-6">
@@ -57,6 +61,8 @@ function Login({ setAuth }) {
             </form>
             {error && <p className="text-red-500 mt-4">{error}</p>}
         </div>
+        <Footer />
+        </>
     );
     
 }

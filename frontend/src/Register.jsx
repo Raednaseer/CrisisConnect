@@ -1,6 +1,8 @@
 // Register.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Header from './Header';
+import Footer from './Footer';
 
 
 function Register() {
@@ -29,6 +31,8 @@ function Register() {
     };
 
     return (
+        <>
+        <Header />
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
             <h2 className="text-3xl font-semibold mb-6">Register</h2>
             <form onSubmit={handleSubmit} className="w-full max-w-md bg-white shadow-md rounded-lg px-8 py-6">
@@ -78,6 +82,8 @@ function Register() {
                 </button>
             </form>
         </div>
+        <Footer />
+        </>
     );
     
 }
