@@ -21,6 +21,7 @@ function Login({ setAuth }) {
 
         if (response.ok) {
             localStorage.setItem('accessToken', data.access);
+            localStorage.setItem('user', JSON.stringify(data.user));
             setAuth(data.user);
             navigate('/incident-report');
         } else {

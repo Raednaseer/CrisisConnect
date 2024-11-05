@@ -32,6 +32,7 @@ class LoginView(APIView):
                     'id': user.id,
                     'username': user.username,
                     'role': user.role,
+                    'phone_no' : user.phone_no,
                 }
             })
         return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)

@@ -1,3 +1,4 @@
+// IncidentReport.js
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import Footer from './Footer';
@@ -10,14 +11,19 @@ const IncidentReport = () => {
     const [weatherData, setWeatherData] = useState(null);
     const [latitude, setLatitude] = useState(null);
     const [longitude, setLongitude] = useState(null);
+    const [id, setId] = useState('')
+    const [username, setUsername] = useState('')
     
-
-    // Fetch latitude and longitude on component load
     useEffect(() => {
+        const userData = JSON.parse(localStorage.getItem('user')); 
+        if (userData) {
+            setId(userData.id)
+            setUsername(userData.username);
+            setPhone(userData.phone_no);
+        }
         getLocation();
     }, []);
 
-    // Function to get user's geolocation
     const getLocation = () => {
         if (!navigator.geolocation) {
             setError('Geolocation is not supported by this browser.');
@@ -36,14 +42,12 @@ const IncidentReport = () => {
         );
     };
 
-    // Fetch weather data whenever latitude and longitude are available
     useEffect(() => {
         if (latitude && longitude) {
             fetchWeatherData(latitude, longitude);
         }
     }, [latitude, longitude]);
 
-    // Fetch weather data from API
     const fetchWeatherData = async (lat, lon) => {
         const API_KEY = 'e9208fa614d15f7dad27de3a627f321c';
         const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
@@ -60,7 +64,8 @@ const IncidentReport = () => {
             setError("Error fetching weather data. Please try again.");
         }
     };
-
+    
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -70,6 +75,7 @@ const IncidentReport = () => {
             phone_no,
             latitude: String(latitude),
             longitude: String(longitude),
+            reported_by : id
         };
 
         try {
@@ -92,7 +98,6 @@ const IncidentReport = () => {
             // Reset form fields
             setTitle('');
             setDescription('');
-            setPhone('');
             setError(null);
         } catch (error) {
             console.error('Error submitting incident report:', error);
@@ -104,12 +109,20 @@ const IncidentReport = () => {
         <>
         <Header />
         <div className="min-h-screen flex">
-            
             {/* Left hand side */}
             <div className="w-full lg:w-1/2 flex items-center justify-center bg-gray-100">
                 <div className="w-full max-w-lg p-8 bg-white rounded-lg shadow-lg m-6">
                     <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Report an Incident</h1>
                     <form onSubmit={handleSubmit} className="space-y-6">
+                        <div>
+                            <label className="block text-gray-600 font-medium mb-2">Username</label>
+                            <input
+                                type="text"
+                                value={username} // Automatically populated from user data
+                                readOnly // Make it read-only to prevent user modification
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                        </div>
                         <div>
                             <label className="block text-gray-600 font-medium mb-2">Title:</label>
                             <input
@@ -130,13 +143,13 @@ const IncidentReport = () => {
                                 rows="4"
                             ></textarea>
                         </div>
+                        {/* Remove Phone No Input */}
                         <div>
                             <label className="block text-gray-600 font-medium mb-2">Phone No:</label>
                             <input
                                 type="text"
-                                value={phone_no}
-                                onChange={(e) => setPhone(e.target.value)}
-                                required
+                                value={phone_no} // Automatically populated from user data
+                                readOnly // Make it read-only to prevent user modification
                                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
