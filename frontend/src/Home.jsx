@@ -1,13 +1,13 @@
 import React from 'react'
 import Header from './Header'
 import Footer from './Footer'
+import PublicIncidentReport from './PublicIncidentReport'
 
 function Home() {
   return (
     <>
         <div>
-            <Header />
-            <Footer />
+              <PublicIncidentReport />
         </div>
     </>
   )

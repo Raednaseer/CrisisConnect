@@ -13,6 +13,7 @@ const IncidentReport = () => {
     const [longitude, setLongitude] = useState(null);
     const [id, setId] = useState('')
     const [username, setUsername] = useState('')
+    const [type, setType] = useState('natural_disaster')
     
     useEffect(() => {
         const userData = JSON.parse(localStorage.getItem('user')); 
@@ -133,6 +134,18 @@ const IncidentReport = () => {
                                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
+                        <div className="mb-4">
+                                <label className="block text-gray-600 font-medium mb-2">Type</label>
+                                <select
+                                    onChange={e => setType(e.target.value)}
+                                    value={type}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                >
+                                    <option value="natural_disaster">Natural Disaster</option>
+                                    <option value="medical_emergency">Medical Emergency</option>
+                                    <option value="accidents">Accidents</option>
+                                </select>
+                            </div>
                         <div>
                             <label className="block text-gray-600 font-medium mb-2">Description:</label>
                             <textarea

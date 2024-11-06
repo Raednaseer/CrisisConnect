@@ -7,6 +7,7 @@ import IncidentReport from './IncidentReport';
 import TrackRequest from './TrackRequest';
 import Home from './Home';
 import Profile from './Profile';
+import Contact from './Contact';
 
 function App() {
     const [auth, setAuth] = useState(null);
@@ -28,6 +29,7 @@ function App() {
               } />
               <Route path="/track-request" element={auth ? <TrackRequest /> : <Login setAuth={setAuth} />} />
               <Route path="/profile" element={auth ? <Profile /> : <Login setAuth={setAuth} />} />
+              <Route path="/contact" element={<Contact />} />
             </Routes>
         </Router>
     );
