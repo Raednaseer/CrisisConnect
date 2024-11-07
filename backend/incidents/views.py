@@ -1,45 +1,58 @@
 from rest_framework.views import APIView
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics,status
 from rest_framework.response import Response
 from .models import Incident
-from .serializers import IncidentSerializer,LocationSerializer
+from .serializers import (IncidentSerializer,IncidentListSerializer,AssignIncidentSerializer,ResolveIncidentSerializer)
 from rest_framework.permissions import IsAuthenticated
+from users.permissions import IsAdmin,IsVictim,IsResponder
 """ from django.core import mail
 from django.conf import settings """
+from rest_framework.decorators import action
+
 
 class IncidentViewSet(viewsets.ModelViewSet):
     queryset = Incident.objects.all()
-    serializer_class = IncidentSerializer
+    permission_classes = [IsAuthenticated]
 
-    def perform_create(self, serializer):
-        # Automatically set latitude and longitude from the request data
-        serializer.save()
-        """ self.send_confirmation_email(incident)
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return IncidentSerializer
+        elif self.action == 'assign':
+            return AssignIncidentSerializer
+        elif self.action == 'resolve':
+            return ResolveIncidentSerializer
+        return IncidentListSerializer
 
-    def send_confirmation_email(self, incident):
-        subject = f"Incident Report Confirmation: {incident.title}"
-        message = f"
-        Hello,
+    @action(detail=False, methods=['get'], permission_classes=[IsResponder])
+    def reported_incidents(self, request):
+        # Custom logic to filter incidents by status 'reported'
+        queryset = self.get_queryset().filter(status='reported')
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
-        Your incident report has been successfully submitted.
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    def assign(self, request, pk=None):
+        incident = self.get_object()
+        if incident.status != 'reported':
+            return Response({"error": "Incident is not available for assignment."}, status=status.HTTP_400_BAD_REQUEST)
 
-        Details:
-        - Title: {incident.title}
-        - Type: {incident.type}
-        - Status: {incident.status}
-        - Timestamp: {incident.timestamp.strftime('%Y-%m-%d %H:%M:%S')}
-        - Location: Latitude: {incident.latitude}, Longitude: {incident.longitude}
+        serializer = self.get_serializer(incident, data={"assigned_responder": request.user.id}, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"success": "Incident assigned to responder."}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        Thank you for reporting the incident.
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    def resolve(self, request, pk=None):
+        incident = self.get_object()
+        if incident.status != 'in_progress' or incident.assigned_responder != request.user:
+            return Response({"error": "Only the assigned responder can resolve this incident."}, status=status.HTTP_400_BAD_REQUEST)
 
-        Best regards,
-        CrisisConnect Team
-        "
-        from_email = settings.EMAIL_HOST_USER
-        recipient_email = incident.username  # Use reported_by or username (email)
-        
-        mail.send_mail(subject, message, from_email, [recipient_email]) """
- 
+        serializer = self.get_serializer(incident, data={}, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"success": "Incident resolved."}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserReportsView(generics.ListAPIView):
@@ -49,4 +62,12 @@ class UserReportsView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         return Incident.objects.filter(reported_by=user.id)
+
+class ResponderAssignedView(generics.ListAPIView):
+    serializer_class = IncidentSerializer
+    permission_classes = [IsResponder]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Incident.objects.filter(assigned_responder=user.id)
 

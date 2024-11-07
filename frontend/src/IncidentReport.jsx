@@ -69,33 +69,43 @@ const IncidentReport = () => {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         const incidentData = {
             title,
             description,
             phone_no,
             latitude: String(latitude),
             longitude: String(longitude),
-            reported_by : id
+            reported_by: id,
+            type: type
         };
-
+    
+        // Get token from local storage
+        const token = localStorage.getItem('accessToken');
+    
+        if (!token) {
+            setError('Authentication token is missing. Please log in again.');
+            return;
+        }
+    
         try {
             const response = await fetch('http://127.0.0.1:8000/incidents/incidents/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`, // Add the token to the headers
                 },
                 body: JSON.stringify(incidentData),
             });
-
+    
             if (!response.ok) {
                 const errorResponse = await response.json();
                 throw new Error(errorResponse.detail || 'Failed to submit incident');
             }
-
+    
             const responseData = await response.json();
             console.log('Incident Reported:', responseData);
-
+    
             // Reset form fields
             setTitle('');
             setDescription('');
