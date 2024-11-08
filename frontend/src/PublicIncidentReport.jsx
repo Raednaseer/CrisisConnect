@@ -73,7 +73,7 @@ const PublicIncidentReport = () => {
         };
 
         try {
-            const response = await fetch('http://127.0.0.1:8000/incidents/incidents/', {
+            const response = await fetch('http://127.0.0.1:8000/incidents/incidents/report_incident/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

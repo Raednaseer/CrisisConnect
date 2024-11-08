@@ -1,115 +1,150 @@
-import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
-import axios from 'axios';
+import React, { useState, useEffect, useRef } from "react";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import { Button, Select, Typography, Card, Space } from "antd";
+import { EnvironmentOutlined, SearchOutlined } from '@ant-design/icons';
+import './Location.css';
+import HeaderComponent from "./HeroSection";
+
+const { Title, Paragraph } = Typography;
+
+// Function to calculate distance using Haversine formula
+const calculateDistance = (lat1, lon1, lat2, lon2) => {
+  const R = 6371; // Earth radius in km
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c; // Distance in km
+};
 
 const HospitalLocator = () => {
-    const [hospitals, setHospitals] = useState([]);
-    const [userLocation, setUserLocation] = useState([51.505, -0.09]); // Default location (London)
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+  const [userLocation, setUserLocation] = useState(null);
+  const [locationType, setLocationType] = useState("hospital");
+  const [locationInfo, setLocationInfo] = useState(null);
+  const mapRef = useRef(null); // Ref to hold map instance
+  const markers = useRef([]); // Ref to store markers
 
-    // Get user's current location using the Geolocation API
-    useEffect(() => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    setUserLocation([position.coords.latitude, position.coords.longitude]);
-                    fetchHospitals(position.coords.latitude, position.coords.longitude);
-                },
-                (err) => {
-                    setError('Unable to retrieve your location');
-                    setLoading(false);
-                }
-            );
-        } else {
-            setError('Geolocation is not supported by this browser.');
-            setLoading(false);
-        }
-    }, []);
+  // Initialize map and set default position
+  useEffect(() => {
+    if (mapRef.current) return; // Only initialize once
 
-    // Fetch nearby hospitals using Nominatim API based on the user's location
-    const fetchHospitals = async (lat, lon) => {
-        const radius = 5000; // Search within a 5 km radius
-        const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&q=hospital&lat=${lat}&lon=${lon}&radius=${radius}&limit=10`;
+    const initialMap = L.map("map").setView([37.7749, -122.4194], 13); // San Francisco coordinates as fallback
 
-        try {
-            const response = await axios.get(url);
-            const hospitalData = response.data;
-            setHospitals(hospitalData);
-            setLoading(false);
-        } catch (error) {
-            setError('Error fetching hospital data');
-            setLoading(false);
-        }
-    };
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
+    }).addTo(initialMap);
 
-    return (
-        <div className="min-h-screen bg-gray-50 py-12 px-6">
-            <header className="bg-blue-800 text-white py-4">
-                <div className="max-w-7xl mx-auto flex justify-between items-center px-6">
-                    <h1 className="text-3xl font-bold">Nearby Hospitals</h1>
-                </div>
-            </header>
+    mapRef.current = initialMap;
+   
+    // Fetch user's location once the map is ready
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        const userLatitude = position.coords.latitude;
+        const userLongitude = position.coords.longitude;
+        setUserLocation({ latitude: userLatitude, longitude: userLongitude });
 
-            <section className="py-12 px-6 text-center">
-                <h2 className="text-3xl font-semibold mb-4">Find Hospitals Near You</h2>
-                <p className="text-lg mb-8">Use your location to locate nearby hospitals for emergency needs.</p>
-            </section>
+        initialMap.setView([userLatitude, userLongitude], 13);
+        L.marker([userLatitude, userLongitude]).addTo(initialMap).bindPopup("You are here").openPopup();
+      });
+    }
+  }, []);
 
-            <section className="max-w-7xl mx-auto px-6">
-                {loading ? (
-                    <div className="text-center">
-                        <p>Loading hospitals...</p>
-                    </div>
-                ) : error ? (
-                    <div className="text-center text-red-600">
-                        <p>{error}</p>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                        {/* Map Section */}
-                        <div className="lg:w-full w-full h-96 mb-8 lg:mb-0 rounded-lg overflow-hidden shadow-lg">
-                            <MapContainer center={userLocation} zoom={13} style={{ height: '100%', width: '100%' }}>
-                                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                                <Marker position={userLocation} icon={new L.Icon.Default()}>
-                                    <Popup>Your Location</Popup>
-                                </Marker>
-                                {hospitals.map((hospital, index) => (
-                                    <Marker
-                                        key={index}
-                                        position={[hospital.lat, hospital.lon]}
-                                        icon={new L.Icon.Default()}
-                                    >
-                                        <Popup>{hospital.display_name}</Popup>
-                                    </Marker>
-                                ))}
-                            </MapContainer>
-                        </div>
+  // Fetch nearby locations from Overpass API
+  const getNearbyLocations = (latitude, longitude, locationType) => {
+    const map = mapRef.current; // Get the map instance from the ref
+    if (map) {
+      // Clear existing markers
+      markers.current.forEach(marker => map.removeLayer(marker));
+      markers.current = []; // Reset markers
 
-                        {/* Hospital List Section */}
-                        <div className="lg:w-full w-full space-y-6">
-                            <h3 className="text-2xl font-semibold mb-4">Nearby Hospitals</h3>
-                            <ul className="space-y-4">
-                                {hospitals.map((hospital, index) => (
-                                    <li key={index} className="bg-white p-6 shadow-lg rounded-lg flex flex-col">
-                                        <h4 className="text-xl font-semibold">{hospital.display_name}</h4>
-                                        <p className="text-md">{hospital.address?.road}, {hospital.address?.city}</p>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-                )}
-            </section>
+      const amenity = locationType === "police" ? "police" : "hospital";
+      const overpassUrl = `https://overpass-api.de/api/interpreter?data=[out:json];node(around:5000,${latitude},${longitude})[amenity=${amenity}];out;`;
 
-            <footer className="bg-blue-800 text-white py-8">
-                <div className="max-w-7xl mx-auto text-center">
-                    <p>&copy; 2024 CrisisNet. All Rights Reserved.</p>
-                </div>
-            </footer>
-        </div>
-    );
+      fetch(overpassUrl)
+        .then(response => response.json())
+        .then(data => {
+          data.elements.forEach(location => {
+            const locationLat = location.lat;
+            const locationLon = location.lon;
+            const distance = calculateDistance(latitude, longitude, locationLat, locationLon);
+
+            // Create marker and add to map
+            const marker = L.marker([locationLat, locationLon]).addTo(map);
+            markers.current.push(marker); // Add marker to the array
+
+            marker.bindPopup(`
+              <b>${location.tags.name || locationType.charAt(0).toUpperCase() + locationType.slice(1)}</b><br>
+              Distance: ${distance.toFixed(2)} km
+            `);
+
+            // Display the location info when clicked
+            marker.on("click", () => {
+              setLocationInfo({
+                name: location.tags.name || "Unknown",
+                type: locationType.charAt(0).toUpperCase() + locationType.slice(1),
+                distance: distance.toFixed(2),
+                link: `https://www.google.com/maps?q=${locationLat},${locationLon}`
+              });
+            });
+          });
+        })
+        .catch(error => {
+          console.error("Error fetching data from Overpass API:", error);
+        });
+    }
+  };
+
+  const handleNearbyClick = () => {
+    if (userLocation) {
+      getNearbyLocations(userLocation.latitude, userLocation.longitude, locationType);
+    } else {
+      alert("Fetching location... Please try again in a few seconds.");
+    }
+  };
+
+  return (
+    <div>
+      <Title level={2}>Find Nearby Locations</Title>
+
+      <Space direction="vertical" size="large" style={{ display: 'flex', marginBottom: '20px' }}>
+        <Button
+          type="primary"
+          icon={<SearchOutlined />}
+          onClick={handleNearbyClick}
+          loading={!userLocation}
+        >
+          Show Nearby {locationType === "hospital" ? "Hospitals" : "Police Stations"}
+        </Button>
+
+        <Select
+          value={locationType}
+          onChange={(value) => setLocationType(value)}
+          style={{ width: 200 }}
+          options={[
+            { label: "Hospitals", value: "hospital" },
+            { label: "Police Stations", value: "police" }
+          ]}
+        />
+      </Space>
+
+      <div id="map" style={{ height: '500px', width: '100%' }}></div>
+
+      {/* Location info box */}
+      {locationInfo && (
+        <Card style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1000 }}>
+          <Title level={4}>{locationInfo.type} Information</Title>
+          <Paragraph><strong>{locationInfo.type}:</strong> {locationInfo.name}</Paragraph>
+          <Paragraph><strong>Distance from you:</strong> {locationInfo.distance} km</Paragraph>
+          <a href={locationInfo.link} target="_blank" rel="noopener noreferrer">
+            <Button type="link">View on Google Maps</Button>
+          </a>
+        </Card>
+      )}
+    </div>
+  );
 };
 
 export default HospitalLocator;

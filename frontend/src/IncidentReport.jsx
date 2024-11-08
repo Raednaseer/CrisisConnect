@@ -77,7 +77,8 @@ const IncidentReport = () => {
             latitude: String(latitude),
             longitude: String(longitude),
             reported_by: id,
-            type: type
+            type: type,
+            username : username
         };
     
         // Get token from local storage

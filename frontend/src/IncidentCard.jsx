@@ -10,7 +10,7 @@ const IncidentCard = ({ incident, onAssign }) => {
         <strong>Type:</strong> {incident.type}
       </p>
       <p className="text-gray-500 mt-1">
-        <strong>Reported by:</strong> {incident.reported_by}
+        <strong>Reported by:</strong> {incident.username}
       </p>
       <p className="text-gray-500 mt-1">
         <strong>Contact:</strong> {incident.phone_no}

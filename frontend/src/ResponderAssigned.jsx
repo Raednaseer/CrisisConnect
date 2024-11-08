@@ -74,7 +74,7 @@ const ResponderAssigned = () => {
                                     <h2 className="font-semibold">{report.title}</h2>
                                     <p>Type: {report.type}</p>
                                     <p>{report.description}</p>
-                                    <p>Status: {report.status}</p>
+                                    <p className="font-semibold">Status: {report.status}</p>
                                     <p>Submitted on: {new Date(report.timestamp).toLocaleString()}</p>
                                     {report.status !== 'solved' && (
                                         <button

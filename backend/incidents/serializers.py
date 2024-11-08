@@ -17,7 +17,7 @@ class IncidentListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Incident
-        fields = ['id', 'title', 'description', 'latitude', 'longitude', 'timestamp' ,'status', 'assigned_responder', 'type','reported_by','phone_no']
+        fields = ['id', 'title', 'description', 'latitude', 'longitude', 'timestamp' ,'status', 'assigned_responder', 'type','username','phone_no']
 
 class AssignIncidentSerializer(serializers.ModelSerializer):
     class Meta:
