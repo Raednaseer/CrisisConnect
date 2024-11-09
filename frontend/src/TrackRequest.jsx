@@ -1,6 +1,6 @@
 // TrackRequest.js
 import React, { useEffect, useState } from 'react';
-import Header from './Header';
+import HeaderNavVictim from './HeaderNavVictim';
 import Footer from './Footer';
 
 const TrackRequest = () => {
@@ -37,7 +37,7 @@ const TrackRequest = () => {
 
     return (
         <>
-            <Header />
+            <HeaderNavVictim />
             <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
                 <h1 className="text-2xl font-semibold mb-4">Your Submitted Reports</h1>
                 {error && <p className="text-red-500">{error}</p>}

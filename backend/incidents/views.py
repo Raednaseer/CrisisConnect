@@ -78,5 +78,6 @@ class ResponderAssignedView(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return Incident.objects.filter(assigned_responder=user.id)
+        return Incident.objects.filter(assigned_responder=user.id, status='in_progress')
+
 

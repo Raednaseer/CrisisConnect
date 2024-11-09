@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';  // Import axios
-import Header from './Header';
+import HeaderNavResponder from './HeaderNavResponder';
 import Footer from './Footer';
 
 const ResponderAssigned = () => {
@@ -60,7 +60,7 @@ const ResponderAssigned = () => {
 
     return (
         <>
-            <Header />
+            <HeaderNavResponder />
             <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
                 <h1 className="text-2xl font-semibold mb-4">Assigned Incidents</h1>
                 {error && <p className="text-red-500">{error}</p>}

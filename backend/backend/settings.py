@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'users',
     'incidents',
     'corsheaders',
+    'app1',
 ]
 
 MIDDLEWARE = [

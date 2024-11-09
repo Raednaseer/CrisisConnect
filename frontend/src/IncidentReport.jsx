@@ -1,7 +1,12 @@
-// IncidentReport.js
 import React, { useState, useEffect } from 'react';
-import Header from './Header';
+import { Layout, Form, Input, Button, Select, Typography, Row, Col, Card, Alert } from 'antd';
+import { EnvironmentOutlined } from '@ant-design/icons';
+import HeaderNavVictim from './HeaderNavVictim';
 import Footer from './Footer';
+
+const { Content } = Layout;
+const { Title, Text, Paragraph } = Typography;
+const { Option } = Select;
 
 const IncidentReport = () => {
     const [title, setTitle] = useState('');
@@ -11,16 +16,17 @@ const IncidentReport = () => {
     const [weatherData, setWeatherData] = useState(null);
     const [latitude, setLatitude] = useState(null);
     const [longitude, setLongitude] = useState(null);
-    const [id, setId] = useState('')
-    const [username, setUsername] = useState('')
-    const [type, setType] = useState('natural_disaster')
-    
+    const [username, setUsername] = useState('');
+    const [type, setType] = useState('natural_disaster');
+    const [userData, setUserData] = useState(null); // New state variable for user data
+    const [id, setId] = useState(0);
     useEffect(() => {
-        const userData = JSON.parse(localStorage.getItem('user')); 
-        if (userData) {
-            setId(userData.id)
-            setUsername(userData.username);
-            setPhone(userData.phone_no);
+        const userDataFromStorage = JSON.parse(localStorage.getItem('user')); 
+        if (userDataFromStorage) {
+            setUserData(userDataFromStorage); // Set user data to state
+            setUsername(userDataFromStorage.username);
+            setPhone(userDataFromStorage.phone_no);
+            setId(userDataFromStorage.id)
         }
         getLocation();
     }, []);
@@ -59,55 +65,50 @@ const IncidentReport = () => {
 
             const data = await response.json();
             setWeatherData(data);
-            setError(null); // Clear any previous errors
+            setError(null);
         } catch (error) {
             console.error("Error fetching weather data:", error);
             setError("Error fetching weather data. Please try again.");
         }
     };
-    
-    
+
     const handleSubmit = async (e) => {
-        e.preventDefault();
-    
         const incidentData = {
             title,
             description,
             phone_no,
             latitude: String(latitude),
             longitude: String(longitude),
-            reported_by: id,
+            reported_by: id, // Use userData.id here
             type: type,
-            username : username
+            username: username
         };
-    
-        // Get token from local storage
+
         const token = localStorage.getItem('accessToken');
-    
+
         if (!token) {
             setError('Authentication token is missing. Please log in again.');
             return;
         }
-    
+
         try {
             const response = await fetch('http://127.0.0.1:8000/incidents/incidents/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`, // Add the token to the headers
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify(incidentData),
             });
-    
+
             if (!response.ok) {
                 const errorResponse = await response.json();
                 throw new Error(errorResponse.detail || 'Failed to submit incident');
             }
-    
+
             const responseData = await response.json();
             console.log('Incident Reported:', responseData);
-    
-            // Reset form fields
+
             setTitle('');
             setDescription('');
             setError(null);
@@ -119,94 +120,68 @@ const IncidentReport = () => {
 
     return (
         <>
-        <Header />
-        <div className="min-h-screen flex">
-            {/* Left hand side */}
-            <div className="w-full lg:w-1/2 flex items-center justify-center bg-gray-100">
-                <div className="w-full max-w-lg p-8 bg-white rounded-lg shadow-lg m-6">
-                    <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Report an Incident</h1>
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div>
-                            <label className="block text-gray-600 font-medium mb-2">Username</label>
-                            <input
-                                type="text"
-                                value={username} // Automatically populated from user data
-                                readOnly // Make it read-only to prevent user modification
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-gray-600 font-medium mb-2">Title:</label>
-                            <input
-                                type="text"
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                                required
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                        </div>
-                        <div className="mb-4">
-                                <label className="block text-gray-600 font-medium mb-2">Type</label>
-                                <select
-                                    onChange={e => setType(e.target.value)}
-                                    value={type}
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                >
-                                    <option value="natural_disaster">Natural Disaster</option>
-                                    <option value="medical_emergency">Medical Emergency</option>
-                                    <option value="accidents">Accidents</option>
-                                </select>
-                            </div>
-                        <div>
-                            <label className="block text-gray-600 font-medium mb-2">Description:</label>
-                            <textarea
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                required
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                rows="4"
-                            ></textarea>
-                        </div>
-                        {/* Remove Phone No Input */}
-                        <div>
-                            <label className="block text-gray-600 font-medium mb-2">Phone No:</label>
-                            <input
-                                type="text"
-                                value={phone_no} // Automatically populated from user data
-                                readOnly // Make it read-only to prevent user modification
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                        </div>
-                        <button
-                            type="submit"
-                            className="w-full py-3 text-white bg-blue-500 hover:bg-blue-600 rounded-lg font-semibold transition duration-200"
-                        >
-                            Submit Incident
-                        </button>
-                        {error && <div className="text-red-500 text-center mt-4">{error}</div>}
-                    </form>
-                </div>
-            </div>
-            
-            {/* Right side */}
-            <div className="hidden lg:flex w-1/2 bg-blue-500 items-center justify-center text-white">
-                <div className="text-center">
-                    <h2 className="text-2xl font-semibold mb-4">Weather Details</h2>
-                    {weatherData ? (
-                        <div>
-                            <p className="text-xl">{weatherData.name}</p>
-                            <p className="text-4xl font-bold">{weatherData.main.temp}°C</p>
-                            <p className="capitalize">{weatherData.weather[0].description}</p>
-                            <p>Humidity: {weatherData.main.humidity}%</p>
-                            <p>Wind Speed: {weatherData.wind.speed} m/s</p>
-                        </div>
-                    ) : (
-                        <p>Loading weather data...</p>
-                    )}
-                </div>
-            </div>
-        </div>
-        <Footer />
+            <HeaderNavVictim />
+            <Layout style={{ backgroundColor: '#f0f2f5' }}>
+                <Content style={{ padding: '50px', backgroundColor: '#e6f7ff' }}>
+                    <Row gutter={[16, 16]} justify="center">
+                        <Col xs={24} lg={12}>
+                            <Card style={{ boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '10px' }}>
+                                <Title level={3} style={{ color: '#003366', textAlign: 'center' }}>
+                                    Report an Incident
+                                </Title>
+                                {error && <Alert message={error} type="error" showIcon style={{ marginBottom: '16px' }} />}
+                                <Form layout="vertical" onFinish={handleSubmit}>
+                                    <Form.Item label="Username" required>
+                                        <Input value={username} readOnly />
+                                    </Form.Item>
+                                    <Form.Item label="Phone No" required>
+                                        <Input value={phone_no} readOnly />
+                                    </Form.Item>
+                                    <Form.Item label="Type" required>
+                                        <Select value={type} onChange={(value) => setType(value)}>
+                                            <Option value="natural_disaster">Natural Disaster</Option>
+                                            <Option value="medical_emergency">Medical Emergency</Option>
+                                            <Option value="accidents">Accidents</Option>
+                                        </Select>
+                                    </Form.Item>
+                                    <Form.Item label="Title" required>
+                                        <Input value={title} onChange={(e) => setTitle(e.target.value)} />
+                                    </Form.Item>
+                                    <Form.Item label="Description" required>
+                                        <Input.TextArea rows={4} value={description} onChange={(e) => setDescription(e.target.value)} />
+                                    </Form.Item>
+                                    <Form.Item>
+                                        <Button type="primary" htmlType="submit" block>
+                                            Submit Incident
+                                        </Button>
+                                    </Form.Item>
+                                </Form>
+                            </Card>
+                        </Col>
+                        <Col xs={24} lg={12}>
+                            <Card style={{ textAlign: 'center', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '10px' }}>
+                                <Title level={4}>Weather Details</Title>
+                                {weatherData ? (
+                                    <>
+                                        <Text strong>{weatherData.name}</Text>
+                                        <Paragraph>
+                                            <Text style={{ fontSize: '24px', color: '#1890ff', fontWeight: 'bold' }}>
+                                                {weatherData.main.temp}°C
+                                            </Text>
+                                        </Paragraph>
+                                        <Paragraph>{weatherData.weather[0].description}</Paragraph>
+                                        <Paragraph>Humidity: {weatherData.main.humidity}%</Paragraph>
+                                        <Paragraph>Wind Speed: {weatherData.wind.speed} m/s</Paragraph>
+                                    </>
+                                ) : (
+                                    <Paragraph>Loading weather data...</Paragraph>
+                                )}
+                            </Card>
+                        </Col>
+                    </Row>
+                </Content>
+            </Layout>
+            <Footer />
         </>
     );
 };

@@ -5,17 +5,22 @@ import Register from './Register';
 import Login from './Login';
 import IncidentReport from './IncidentReport';
 import TrackRequest from './TrackRequest';
-import Home from './Home';
 import Profile from './Profile';
 import Contact from './Contact';
 import IncidentList from './IncidentList';
 import HomePage from './Home2';
-import FirstAid from './FirstAid';
-import EmergencyPreparedness from './EmergencyPreparedness';
 import HospitalLocator from './Hospitals';
 import ResponderAssigned from './ResponderAssigned';
 import DonatePage from './DonatePage';
 import WeatherDetails from './WeatherDetails';
+import Transportation from './Transportation';
+import NGO from './NGO';
+import Admin from './Admin';
+import PublicIncidentReport from './PublicIncidentReport';
+import NgoPublic from './NGOPublic';
+import IncidentAdmin from './IncidentAdmin';
+import FaqGuide from './FaqGuide';
+import Dashboard from './Dashboard';
 
 function App() {
     const [auth, setAuth] = useState(null);
@@ -30,16 +35,10 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login setAuth={setAuth} />} />
-              <Route path="/incident-report" element={
-                  <ProtectedRoute>
-                      <IncidentReport />
-                  </ProtectedRoute>
-              } />
+              <Route path="/incident-report" element={<IncidentReport />} />
               <Route path="/track-request" element={auth ? <TrackRequest /> : <Login setAuth={setAuth} />} />
               <Route path="/profile" element={auth ? <Profile /> : <Login setAuth={setAuth} />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/first-aid" element={<FirstAid />} />
-              <Route path="/guides" element={<EmergencyPreparedness />} />
               <Route path="/hospitals" element={<HospitalLocator />} />
               <Route path="/responder-assigned" element={<ResponderAssigned />} /> 
               <Route path="/incident-list" element={
@@ -49,6 +48,14 @@ function App() {
               } />
               <Route path="/donate" element={<DonatePage />} />
               <Route path="/weather" element={<WeatherDetails/>}></Route>
+              <Route path="/transportation" element={<Transportation/>}></Route>
+              <Route path="/ngo" element={<NGO/>}></Route>
+              <Route path="/admin" element={<Admin/>}></Route>
+              <Route path="/public-incident-report" element={<PublicIncidentReport />} />
+              <Route path="/ngo-public" element={<NgoPublic />} />
+              <Route path="/incident-admin" element={<IncidentAdmin />} />
+              <Route path="/faq-guide" element={<FaqGuide />} />
+              <Route path="/dashboard" element={<Dashboard />} />
             </Routes>
         </Router>
     );

@@ -4,61 +4,58 @@ import L from "leaflet";
 import { Button, Select, Typography, Card, Space } from "antd";
 import { EnvironmentOutlined, SearchOutlined } from '@ant-design/icons';
 import './Location.css';
-import HeaderComponent from "./HeroSection";
+import HeaderNav from "./HeaderNav";
 
 const { Title, Paragraph } = Typography;
 
-// Function to calculate distance using Haversine formula
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
-  const R = 6371; // Earth radius in km
+  const R = 6371;
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
   const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
     Math.sin(dLon / 2) * Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c; // Distance in km
+  return R * c;
 };
 
 const HospitalLocator = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [locationType, setLocationType] = useState("hospital");
   const [locationInfo, setLocationInfo] = useState(null);
-  const mapRef = useRef(null); // Ref to hold map instance
-  const markers = useRef([]); // Ref to store markers
+  const mapRef = useRef(null);
+  const markers = useRef([]);
 
-  // Initialize map and set default position
   useEffect(() => {
-    if (mapRef.current) return; // Only initialize once
+    if (mapRef.current) return;
 
-    const initialMap = L.map("map").setView([37.7749, -122.4194], 13); // San Francisco coordinates as fallback
-
+    const initialMap = L.map("map").setView([37.7749, -122.4194], 13);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
+      attribution: "&copy; OpenStreetMap contributors"
     }).addTo(initialMap);
 
     mapRef.current = initialMap;
-   
-    // Fetch user's location once the map is ready
+
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
+      navigator.geolocation.getCurrentPosition(position => {
         const userLatitude = position.coords.latitude;
         const userLongitude = position.coords.longitude;
         setUserLocation({ latitude: userLatitude, longitude: userLongitude });
 
         initialMap.setView([userLatitude, userLongitude], 13);
-        L.marker([userLatitude, userLongitude]).addTo(initialMap).bindPopup("You are here").openPopup();
+        L.marker([userLatitude, userLongitude])
+          .addTo(initialMap)
+          .bindPopup("You are here")
+          .openPopup();
       });
     }
   }, []);
 
-  // Fetch nearby locations from Overpass API
   const getNearbyLocations = (latitude, longitude, locationType) => {
-    const map = mapRef.current; // Get the map instance from the ref
+    const map = mapRef.current;
     if (map) {
-      // Clear existing markers
       markers.current.forEach(marker => map.removeLayer(marker));
-      markers.current = []; // Reset markers
+      markers.current = [];
 
       const amenity = locationType === "police" ? "police" : "hospital";
       const overpassUrl = `https://overpass-api.de/api/interpreter?data=[out:json];node(around:5000,${latitude},${longitude})[amenity=${amenity}];out;`;
@@ -71,16 +68,14 @@ const HospitalLocator = () => {
             const locationLon = location.lon;
             const distance = calculateDistance(latitude, longitude, locationLat, locationLon);
 
-            // Create marker and add to map
             const marker = L.marker([locationLat, locationLon]).addTo(map);
-            markers.current.push(marker); // Add marker to the array
+            markers.current.push(marker);
 
             marker.bindPopup(`
               <b>${location.tags.name || locationType.charAt(0).toUpperCase() + locationType.slice(1)}</b><br>
               Distance: ${distance.toFixed(2)} km
             `);
 
-            // Display the location info when clicked
             marker.on("click", () => {
               setLocationInfo({
                 name: location.tags.name || "Unknown",
@@ -107,34 +102,34 @@ const HospitalLocator = () => {
 
   return (
     <div>
-      <Title level={2}>Find Nearby Locations</Title>
+      <HeaderNav />
+      <div style={{ padding: '20px' ,backgroundColor: '#e6f7ff'}}>
+        <Title level={3}>Find Nearby Locations</Title>
+        <Space direction="vertical" size="small" style={{ marginBottom: '20px' }}>
+          <Button
+            type="primary"
+            icon={<SearchOutlined />}
+            onClick={handleNearbyClick}
+            loading={!userLocation}
+          >
+            Show Nearby {locationType === "hospital" ? "Hospitals" : "Police Stations"}
+          </Button>
+          <Select
+            value={locationType}
+            onChange={(value) => setLocationType(value)}
+            style={{ width: 200 }}
+            options={[
+              { label: "Hospitals", value: "hospital" },
+              { label: "Police Stations", value: "police" }
+            ]}
+          />
+        </Space>
+      </div>
 
-      <Space direction="vertical" size="large" style={{ display: 'flex', marginBottom: '20px' }}>
-        <Button
-          type="primary"
-          icon={<SearchOutlined />}
-          onClick={handleNearbyClick}
-          loading={!userLocation}
-        >
-          Show Nearby {locationType === "hospital" ? "Hospitals" : "Police Stations"}
-        </Button>
+      <div id="map" style={{ height: '400px', width: '60%', margin: '0 auto',backgroundColor: '#e6f7ff' }}></div>
 
-        <Select
-          value={locationType}
-          onChange={(value) => setLocationType(value)}
-          style={{ width: 200 }}
-          options={[
-            { label: "Hospitals", value: "hospital" },
-            { label: "Police Stations", value: "police" }
-          ]}
-        />
-      </Space>
-
-      <div id="map" style={{ height: '500px', width: '100%' }}></div>
-
-      {/* Location info box */}
       {locationInfo && (
-        <Card style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1000 }}>
+        <Card className="info-box">
           <Title level={4}>{locationInfo.type} Information</Title>
           <Paragraph><strong>{locationInfo.type}:</strong> {locationInfo.name}</Paragraph>
           <Paragraph><strong>Distance from you:</strong> {locationInfo.distance} km</Paragraph>
