@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Layout, Row, Col, Card, Typography, Spin, Statistic, Descriptions, Divider, Button } from 'antd';
-import { CloudOutlined, EnvironmentOutlined } from '@ant-design/icons'; // Corrected imports
-import { Line } from '@ant-design/plots'; // For adding a temperature chart
+import { CloudOutlined, EnvironmentOutlined } from '@ant-design/icons'; 
+import { Line } from '@ant-design/plots'; 
 
 const { Title, Paragraph } = Typography;
 const { Content } = Layout;
@@ -13,7 +13,6 @@ const WeatherDetails = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Get user's geolocation
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(fetchWeather, handleError);
         } else {
@@ -24,8 +23,7 @@ const WeatherDetails = () => {
     const fetchWeather = (position) => {
         const { latitude, longitude } = position.coords;
 
-        // Replace with your OpenWeatherMap API Key
-        const apiKey = 'e9208fa614d15f7dad27de3a627f321c'; // You need to get an API key from OpenWeatherMap
+        const apiKey = 'e9208fa614d15f7dad27de3a627f321c';
         const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
 
         axios.get(weatherUrl)
