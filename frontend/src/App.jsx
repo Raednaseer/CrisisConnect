@@ -22,6 +22,8 @@ import IncidentAdmin from './IncidentAdmin';
 import FaqGuide from './FaqGuide';
 import Dashboard from './Dashboard';
 import Wellness from './Wellness';
+import NearbyTransport from './NearbyTransport';
+import SheltersAdmin from './SheltersAdmin';
 
 function App() {
     const [auth, setAuth] = useState(null);
@@ -58,6 +60,8 @@ function App() {
               <Route path="/faq-guide" element={<FaqGuide />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/wellness" element={<Wellness />} />
+              <Route path="/nearby-transport" element={<NearbyTransport />} />
+              <Route path="/shelters" element={<SheltersAdmin />} />
             </Routes>
         </Router>
     );

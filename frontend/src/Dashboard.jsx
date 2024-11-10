@@ -11,18 +11,15 @@ const { Title } = Typography;
 const Dashboard = () => {
   const token = localStorage.getItem('accessToken');
   
-  // State for different data sections
   const [incidentStats, setIncidentStats] = useState({});
   const [responders, setResponders] = useState(0);
   const [ngos, setNgos] = useState(0);
   const [transportationStats, setTransportationStats] = useState({});
   const [shelters, setShelters] = useState([]);
 
-  // Fetch data for incidents, responders, NGOs, transportation, and shelters
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch incidents stats
         const incidentResponse = await axios.get('http://127.0.0.1:8000/incidents/stats/', {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -55,7 +52,7 @@ const Dashboard = () => {
         setTransportationStats(transportationResponse.data);
 
         // Fetch shelters data
-        const sheltersResponse = await axios.get('http://127.0.0.1:8000/shelters/', {
+        const sheltersResponse = await axios.get('http://127.0.0.1:8000/app1/shelters/', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -73,7 +70,7 @@ const Dashboard = () => {
   return (
     <>
       <HeaderNavAdmin />
-      <div className="w-full p-4 bg-[#f5f5f5]">
+      <div className="w-full p-4 bg-blue-50">
         <Title level={2}>Admin Dashboard</Title>
         
         {/* Incident Stats Section */}

@@ -13,6 +13,7 @@ const HeaderNavAdmin = () => {
     { key: '/incident-admin', label: 'Incidents', link: '/incident-admin' },
     { key: '/transportation', label: 'Transportation', link: '/transportation' },
     { key: '/ngo', label: 'NGO', link: '/ngo' },
+    { key: '/shelters', label: 'Shelters', link: '/shelters'},
     { key: '/dashboard', label: 'Dashboard', link: '/dashboard'}
   ];
 
