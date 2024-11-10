@@ -70,7 +70,7 @@ class UserReportsView(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return Incident.objects.filter(reported_by=user.id)
+        return Incident.objects.filter(username=user.username)
 
 class ResponderAssignedView(generics.ListAPIView):
     serializer_class = IncidentSerializer

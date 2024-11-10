@@ -35,7 +35,7 @@ const HeaderNavAdmin = () => {
     <Header style={{ background: '#fff', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
       {/* Logo */}
       <div className="logo" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#11003A' }}>
-        <Link to="/" style={{ color: '#11003A', textDecoration: 'none' }}>CrisisNet</Link>
+        <Link to="/" style={{ color: '#11003A', textDecoration: 'none' }}>CrisisConnect Admin</Link>
       </div>
 
       {/* Navigation Menu */}

@@ -104,8 +104,8 @@ const PublicIncidentReport = () => {
     return (
         <>
             <HeaderNav />
-            <Layout style={{ backgroundColor: '#f0f2f5' }}>
-                <Content style={{ padding: '50px', backgroundColor: '#e6f7ff' }}>
+            <Layout style={{ backgroundColor: '#EFF6FF' }}>
+                <Content style={{ padding: '50px', backgroundColor: '#EFF6FF' }}>
                     <Row gutter={[16, 16]} justify="center">
                         <Col xs={24} lg={12}>
                             <Card style={{ boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '10px' }}>

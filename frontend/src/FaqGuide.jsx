@@ -9,7 +9,7 @@ const { Title, Text, Link } = Typography;
 
 const FaqGuide = () => {
     return (
-        <Layout style={{ backgroundColor: '#e6f7ff' }}>
+        <Layout style={{ backgroundColor: '#EFF6FF' }}>
             {/* Header Section */}
             <HeaderNav />
             <Title level={2} style={{ color: 'black', margin: 0, textAlign:"center", marginTop:"50px"}}>CrisisNet Safety & FAQ Guide</Title>

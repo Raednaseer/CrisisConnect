@@ -4,6 +4,7 @@ import { Layout, Row, Col, Card, Typography, Spin, Statistic, Descriptions, Divi
 import { CloudOutlined, EnvironmentOutlined, ThunderboltOutlined, DashboardOutlined, SearchOutlined } from '@ant-design/icons'; 
 import { Line } from '@ant-design/plots'; 
 import HeaderNav from './HeaderNav';
+import Footer from './Footer';
 
 const { Title, Paragraph } = Typography;
 const { Content } = Layout;
@@ -75,11 +76,15 @@ const WeatherDetails = () => {
 
     if (error) {
         return (
+            <>
+            <HeaderNav />
             <Layout style={{ minHeight: '100vh', backgroundColor: '#f0f2f5' }}>
                 <Content style={{ padding: '50px' }}>
                     <Title level={2}>Error: {error}</Title>
                 </Content>
             </Layout>
+            <Footer />
+            </>
         );
     }
 
@@ -166,7 +171,7 @@ const WeatherDetails = () => {
             <div>
                 <HeaderNav />
             </div>
-            <Layout style={{ minHeight: '100vh', backgroundColor: '#f0f2f5' }}>
+            <Layout style={{ minHeight: '100vh', backgroundColor: '#EFF6FF' }}>
                 <Content style={{ padding: '50px' }}>
                     <Row gutter={[16, 16]} justify="center">
                         {/* Main Weather Info Section */}
@@ -258,6 +263,7 @@ const WeatherDetails = () => {
                     </Row>
                 </Content>
             </Layout>
+            <Footer />
         </>
     );
 };

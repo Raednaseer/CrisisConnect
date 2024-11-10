@@ -103,8 +103,8 @@ const HospitalLocator = () => {
   return (
     <div>
       <HeaderNav />
-      <div style={{ padding: '20px' ,backgroundColor: '#e6f7ff'}}>
-        <Title level={3}>Find Nearby Locations</Title>
+      <div style={{ padding: '20px' ,backgroundColor: '#fff', textAlign: "center"}}>
+        <Title level={3}>Find Nearby Hospitals & Police Stations</Title>
         <Space direction="vertical" size="small" style={{ marginBottom: '20px' }}>
           <Button
             type="primary"

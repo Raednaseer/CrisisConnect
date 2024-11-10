@@ -21,6 +21,7 @@ import NgoPublic from './NGOPublic';
 import IncidentAdmin from './IncidentAdmin';
 import FaqGuide from './FaqGuide';
 import Dashboard from './Dashboard';
+import Wellness from './Wellness';
 
 function App() {
     const [auth, setAuth] = useState(null);
@@ -38,7 +39,7 @@ function App() {
               <Route path="/incident-report" element={<IncidentReport />} />
               <Route path="/track-request" element={auth ? <TrackRequest /> : <Login setAuth={setAuth} />} />
               <Route path="/profile" element={auth ? <Profile /> : <Login setAuth={setAuth} />} />
-              <Route path="/contact" element={<Contact />} />
+              <Route path="/emergency" element={<Contact />} />
               <Route path="/hospitals" element={<HospitalLocator />} />
               <Route path="/responder-assigned" element={<ResponderAssigned />} /> 
               <Route path="/incident-list" element={
@@ -56,6 +57,7 @@ function App() {
               <Route path="/incident-admin" element={<IncidentAdmin />} />
               <Route path="/faq-guide" element={<FaqGuide />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/wellness" element={<Wellness />} />
             </Routes>
         </Router>
     );

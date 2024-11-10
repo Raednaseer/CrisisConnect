@@ -15,6 +15,8 @@ const HeaderNav = () => {
     { key: '/ngo-public', label: 'NGO', link: '/ngo-public' },
     { key: '/donate', label: 'Donate', link: '/donate' },
     { key: '/faq-guide', label: 'FAQs & Guides', link: '/faq-guide' },
+    { key: '/wellness', label: 'Wellness', link: '/wellness' },
+    { key: '/emergency', label: 'Emergency Contacts', link: '/emergency' },
     { key: '/login', label: 'Login', link: '/login' },
   ];
 
@@ -37,7 +39,7 @@ const HeaderNav = () => {
     <Header style={{ background: '#fff', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
       {/* Logo */}
       <div className="logo" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#11003A' }}>
-        <Link to="/" style={{ color: '#11003A', textDecoration: 'none' }}>CrisisNet</Link>
+        <Link to="/" style={{ color: '#11003A', textDecoration: 'none' }}>CrisisConnect</Link>
       </div>
 
       {/* Navigation Menu */}

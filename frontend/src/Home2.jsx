@@ -67,7 +67,7 @@ const HomePage = () => {
 
 
             {/* Get Involved Section */}
-            <Content style={{ padding: '60px 50px', backgroundColor: '#e6f7ff' }}>
+            <Content style={{ padding: '60px 50px', backgroundColor: '#EFF6FF' }}>
                 <Row gutter={[16, 16]} justify="center">
                     <Col xs={24} sm={12} md={8}>
                         <Card hoverable bordered={false} style={{ textAlign: 'center', borderRadius: '8px' }}>

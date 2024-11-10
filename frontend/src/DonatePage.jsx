@@ -11,7 +11,7 @@ const DonatePage = () => {
     return (
         <>
         <HeaderNav />
-        <Layout style={{ minHeight: '100vh', padding: '50px', backgroundColor: '#f0f2f5' }}>
+        <Layout style={{ minHeight: '100vh', padding: '50px', backgroundColor: '#EFF6FF' }}>
             <Content style={{ maxWidth: '800px', margin: '0 auto' }}>
                 
                 {/* Page Title */}

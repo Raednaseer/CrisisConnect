@@ -1,7 +1,11 @@
 // TrackRequest.js
 import React, { useEffect, useState } from 'react';
+import { Row, Col, Card, Typography, Alert, Layout } from 'antd';
 import HeaderNavVictim from './HeaderNavVictim';
 import Footer from './Footer';
+
+const { Title, Text } = Typography;
+const { Content } = Layout;
 
 const TrackRequest = () => {
     const [reports, setReports] = useState([]);
@@ -38,27 +42,35 @@ const TrackRequest = () => {
     return (
         <>
             <HeaderNavVictim />
-            <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
-                <h1 className="text-2xl font-semibold mb-4">Your Submitted Reports</h1>
-                {error && <p className="text-red-500">{error}</p>}
-                <div className="w-full max-w-md bg-white shadow-md rounded-lg p-4">
-                    {reports.length === 0 ? (
-                        <p>No reports submitted yet.</p>
-                    ) : (
-                        <ul className="space-y-4">
-                            {reports.map(report => (
-                                <li key={report.id} className="border border-gray-300 p-4 rounded">
-                                    <h2 className="font-semibold">{report.title}</h2>
-                                    <p>Type: {report.type}</p>
-                                    <p>{report.description}</p>
-                                    <p>Status: {report.status}</p>
-                                    <p>Submitted on: {new Date(report.timestamp).toLocaleString()}</p>
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
-            </div>
+            <Layout style={{ backgroundColor: '#f0f2f5' }}>
+                <Content style={{ padding: '50px' }}>
+                    <Title level={2} style={{ textAlign: 'center', color: '#003366' }}>Your Submitted Reports</Title>
+                    {error && <Alert message={error} type="error" showIcon style={{ marginBottom: '16px' }} />}
+                    <Row gutter={[16, 16]} justify="center">
+                        {reports.length === 0 ? (
+                            <Col span={24} style={{ textAlign: 'center' }}>
+                                <Text>No reports submitted yet.</Text>
+                            </Col>
+                        ) : (
+                            reports.map(report => (
+                                <Col xs={24} sm={12} md={8} lg={8} key={report.id}>
+                                    <Card
+                                        title={report.title}
+                                        bordered={false}
+                                        style={{ boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '10px', textAlign: 'center' }}
+                                        headStyle={{ backgroundColor: '#003366', color: '#ffffff', borderRadius: '10px 10px 0 0' }}
+                                    >
+                                        <Text strong>Type:</Text> {report.type}<br />
+                                        <Text strong>Description:</Text> {report.description}<br />
+                                        <Text strong>Status:</Text> {report.status}<br />
+                                        <Text strong>Submitted on:</Text> {new Date(report.timestamp).toLocaleString()}
+                                    </Card>
+                                </Col>
+                            ))
+                        )}
+                    </Row>
+                </Content>
+            </Layout>
             <Footer />
         </>
     );

@@ -20,7 +20,7 @@ const Footer = () => {
                     <Link href="/privacy" style={{ color: '#ffffff', fontWeight: '500' }} underline>
                         Privacy Policy
                     </Link>
-                    <Link href="/contact" style={{ color: '#ffffff', fontWeight: '500' }} underline>
+                    <Link href="/emergency" style={{ color: '#ffffff', fontWeight: '500' }} underline>
                         Contact
                     </Link>
                 </Space>
