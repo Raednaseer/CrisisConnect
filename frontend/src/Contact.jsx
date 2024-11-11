@@ -73,7 +73,7 @@ const EmergencyContact = () => {
 
           <div className="bg-white shadow-md rounded-lg p-6">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">Nearby Hospitals & Police Stations</h2>
-            <a href="/ngo-public" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+            <a href="/hospitals" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
                 Check for neaby Hospitals & Police Stations
               </a>
           </div>

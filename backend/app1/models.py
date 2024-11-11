@@ -17,7 +17,8 @@ class Transportation(models.Model):
         ('in_use', 'In Use'),
         ('maintenance', 'Under Maintenance'),
     ],default='available')
-    location = models.CharField(max_length=100,default='Trivandrum')
+    latitude = models.FloatField(default=8.5)
+    longitude = models.FloatField(default=76.8)
     contact_info = models.CharField(max_length=100)
 
     def __str__(self):
@@ -52,14 +53,14 @@ class TransportRequest(models.Model):
         ('completed', 'Completed'),
         ('cancel', 'Cancel'),
     ]
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    username = models.CharField(max_length=20)
     phone_no = models.CharField(max_length=20)
-    vehicle = models.ForeignKey(Transportation, on_delete=models.CASCADE)  
+    vehicle = models.ForeignKey(Transportation, on_delete=models.CASCADE)      
     latitude = models.FloatField()
     longitude = models.FloatField()
     distance = models.FloatField()
     timestamp = models.DateTimeField(default=timezone.now)
-    request_status = models.CharField(max_length=20,choices=STATUS_CHOICES, default="pending")  # e.g., pending, accepted, completed
+    request_status = models.CharField(max_length=20,choices=STATUS_CHOICES, default="pending")  
  
     def __str__(self):
-        return f"Request for {self.vehicle.vehicle_type} - {self.vehicle.license_plate} by {self.user}"
+        return f"Request for {self.vehicle.vehicle_type} - {self.vehicle.license_plate} by {self.username}"

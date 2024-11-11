@@ -29,9 +29,9 @@ const HeaderNav = () => {
       <Menu.Item key="settings" icon={<SettingOutlined />}>
         <Link to="/settings">Settings</Link>
       </Menu.Item>
-      <Menu.Item key="logout" icon={<LogoutOutlined />}>
-        Logout
-      </Menu.Item>
+      {/* <Menu.Item key="logout" icon={<LogoutOutlined />}>
+        <Link to="/login">Logout</Link>
+      </Menu.Item> */}
     </Menu>
   );
 

@@ -59,30 +59,37 @@ function Register() {
                         </Form.Item>
 
                         <Form.Item
-                            label="Password"
-                            name="password"
-                            rules={[{ required: true, message: 'Please input your password!' }]}
-                        >
-                            <Input.Password
-                                value={password}
-                                onChange={e => setPassword(e.target.value)}
-                                placeholder="Enter your password"
-                                style={{ borderRadius: '8px', padding: '10px' }}
-                            />
-                        </Form.Item>
+    label="Password"
+    name="password"
+    rules={[
+        { required: true, message: 'Please input your password!' },
+        { min: 6, message: 'Password must be at least 6 characters!' },
+    ]}
+>
+    <Input.Password
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+        placeholder="Enter your password"
+        style={{ borderRadius: '8px', padding: '10px' }}
+    />
+</Form.Item>
 
-                        <Form.Item
-                            label="Phone No"
-                            name="phone_no"
-                            rules={[{ required: true, message: 'Please input your phone number!' }]}
-                        >
-                            <Input
-                                value={phoneNo}
-                                onChange={e => setPhoneNo(e.target.value)}
-                                placeholder="Enter your phone number"
-                                style={{ borderRadius: '8px', padding: '10px' }}
-                            />
-                        </Form.Item>
+<Form.Item
+    label="Phone No"
+    name="phone_no"
+    rules={[
+        { required: true, message: 'Please input your phone number!' },
+        { pattern: /^[0-9]{10}$/, message: 'Phone number must be 10 digits long and contain only numbers' },
+    ]}
+>
+    <Input
+        value={phoneNo}
+        onChange={e => setPhoneNo(e.target.value)}
+        placeholder="Enter your phone number"
+        style={{ borderRadius: '8px', padding: '10px' }}
+    />
+</Form.Item>
+
 
                         <Form.Item>
                             <Button

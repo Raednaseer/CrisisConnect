@@ -1,4 +1,5 @@
 # users/serializers.py
+from pyexpat import model
 from rest_framework import serializers
 from .models import User
 
@@ -17,3 +18,9 @@ class RegisterSerializer(serializers.ModelSerializer):
             role=validated_data['role'],
         )
         return user
+
+class UserListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'phone_no','role']
+

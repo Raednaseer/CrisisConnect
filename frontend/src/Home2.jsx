@@ -26,7 +26,7 @@ const HomePage = () => {
                     <Title level={1} style={{ color: '#fff' }}>
                         CrisisNet: Empowering Responders and Communities
                     </Title>
-                    <Paragraph style={{ fontSize: '18px', maxWidth: '600px', margin: '0 auto', color:'#fff' }}>
+                    <Paragraph style={{ fontSize: '18px', maxWidth: '600px', margin: '0 auto', color:'#fff', textAlign: "center"}}>
                         A platform to connect individuals in need with responders and resources during emergencies.
                     </Paragraph>
                     {/* <Link to="/incident-report">

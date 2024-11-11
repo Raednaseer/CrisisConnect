@@ -1,12 +1,13 @@
 # Create your views here.
 from rest_framework import generics,status
-from .serializers import RegisterSerializer
+from .serializers import RegisterSerializer,UserListSerializer
 from .models import User
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
+from .permissions import IsAdmin
 
 
 class RegisterView(generics.CreateAPIView):
@@ -36,3 +37,19 @@ class LoginView(APIView):
                 }
             })
         return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
+class UserListView(APIView):
+    permission_classes = [IsAdmin] 
+
+    def get(self, request):
+        queryset = User.objects.all()
+        serializer = UserListSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class ResponderListView(APIView):
+    permission_classes = [IsAdmin] 
+
+    def get(self, request):
+        queryset = User.objects.filter(role = 'responder')
+        serializer = UserListSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

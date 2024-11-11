@@ -24,6 +24,7 @@ import Dashboard from './Dashboard';
 import Wellness from './Wellness';
 import NearbyTransport from './NearbyTransport';
 import SheltersAdmin from './SheltersAdmin';
+import Responder from './Responders';
 
 function App() {
     const [auth, setAuth] = useState(null);
@@ -62,6 +63,7 @@ function App() {
               <Route path="/wellness" element={<Wellness />} />
               <Route path="/nearby-transport" element={<NearbyTransport />} />
               <Route path="/shelters" element={<SheltersAdmin />} />
+              <Route path="/responders" element={<Responder />} />
             </Routes>
         </Router>
     );

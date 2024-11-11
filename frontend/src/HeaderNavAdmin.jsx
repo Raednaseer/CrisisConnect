@@ -11,6 +11,7 @@ const HeaderNavAdmin = () => {
 
   const menuItems = [
     { key: '/incident-admin', label: 'Incidents', link: '/incident-admin' },
+    { key: '/responders', label: 'Responders', link: '/responders' },
     { key: '/transportation', label: 'Transportation', link: '/transportation' },
     { key: '/ngo', label: 'NGO', link: '/ngo' },
     { key: '/shelters', label: 'Shelters', link: '/shelters'},
@@ -27,7 +28,7 @@ const HeaderNavAdmin = () => {
         <Link to="/settings">Settings</Link>
       </Menu.Item>
       <Menu.Item key="logout" icon={<LogoutOutlined />}>
-        Logout
+      <Link to="/login">Logout</Link>
       </Menu.Item>
     </Menu>
   );
@@ -36,7 +37,7 @@ const HeaderNavAdmin = () => {
     <Header style={{ background: '#fff', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
       {/* Logo */}
       <div className="logo" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#11003A' }}>
-        <Link to="/" style={{ color: '#11003A', textDecoration: 'none' }}>CrisisConnect Admin</Link>
+        <Link to="/dashboard" style={{ color: '#11003A', textDecoration: 'none' }}>CrisisConnect Admin</Link>
       </div>
 
       {/* Navigation Menu */}

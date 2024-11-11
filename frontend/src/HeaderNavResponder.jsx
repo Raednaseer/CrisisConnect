@@ -26,7 +26,7 @@ const HeaderNavResponder = () => {
         <Link to="/settings">Settings</Link>
       </Menu.Item>
       <Menu.Item key="logout" icon={<LogoutOutlined />}>
-        Logout
+        <Link to="/login">Logout</Link>
       </Menu.Item>
     </Menu>
   );

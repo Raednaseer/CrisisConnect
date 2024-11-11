@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Transportation,Shelters,NGO
-from .serializers import TransportationSerializer,SheltersSerializer,NGOSerializer
+from .serializers import TransportationSerializer,SheltersSerializer,NGOSerializer, TransportRequestSerializer,UserTransportRequestSerializer
 from rest_framework.permissions import AllowAny
 from users.permissions import IsAdmin,IsResponder,IsVictim
 
@@ -43,20 +43,24 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from users.models import User
 
+from rest_framework.response import Response
+
+from .utils import calculate_distance  # Import your distance function
+ 
 @api_view(['POST'])
 def get_nearby_vehicles(request):
     latitude = float(request.data.get('latitude'))
     longitude = float(request.data.get('longitude'))
     vehicle_type = request.data.get('vehicle_type')
     radius_km = 5  # Define radius for filtering
-    user_id = request.data.get('user_id')
+    username = request.data.get('username')
     phone_no = request.data.get('phone_no')
  
     # Validate request data
-    if not (user_id and phone_no and latitude and longitude and vehicle_type):
+    if not (username and phone_no and latitude and longitude and vehicle_type):
         return Response({'error': 'Incomplete data provided'}, status=status.HTTP_400_BAD_REQUEST)
  
-    user = User.objects.filter(id=user_id).first()
+    user = User.objects.filter(username=username).first()
     if not user:
         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
  
@@ -73,8 +77,8 @@ def get_nearby_vehicles(request):
         if distance <= radius_km:
             # Save each nearby vehicle to TransportRequest
             transport_request = TransportRequest(
-                user=user,
-                phone_no=phone_no,
+                username=user.username,
+                phone_no=user.phone_no,
                 vehicle=vehicle,
                 latitude=latitude,
                 longitude=longitude,
@@ -93,7 +97,9 @@ def get_nearby_vehicles(request):
                 "latitude": vehicle.latitude,
                 "longitude": vehicle.longitude,
                 "distance": round(distance, 2),
+                "contact_info" : vehicle.contact_info
             })
+ 
     return JsonResponse(nearby_vehicles, safe=False)
 
     
@@ -101,28 +107,26 @@ def get_nearby_vehicles(request):
 def accept_transport_request(request, request_id):
     transport_request = get_object_or_404(TransportRequest, id=request_id, vehicle__owner=request.user)
     
-    # Only allow acceptance if status is pending
     if transport_request.request_status != 'pending':
         return Response({"error": "This request has already been processed."}, status=status.HTTP_400_BAD_REQUEST)
     
     transport_request.request_status = 'accepted'
     transport_request.user_alert = True  # Flag user to notify of change
     transport_request.save()
+
+    # Serialize and return the updated transport request data
+    serializer = TransportRequestSerializer(transport_request)
     
-    return Response({"message": "Request accepted successfully."})
+    return Response({"message": "Request accepted successfully.", "request": serializer.data})
+
 
 
 @api_view(['GET'])
 def user_requests(request):
     requests = TransportRequest.objects.filter(user=request.user).order_by('-timestamp')
-    data = [
-        {
-            "vehicle": req.vehicle.license_plate,
-            "request_status": req.request_status,
-            "distance": req.distance,
-            "timestamp": req.timestamp,
-            "user_alert": req.user_alert,
-        }
-        for req in requests
-    ]
-    return JsonResponse(data, safe=False)
+    serializer = UserTransportRequestSerializer(requests, many=True)
+    return Response(serializer.data)
+
+class TransportRequestViewSet(viewsets.ModelViewSet):
+    queryset=TransportRequest.objects.all()
+    serializer_class=TransportRequestSerializer
