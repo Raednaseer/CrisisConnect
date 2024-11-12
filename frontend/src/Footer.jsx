@@ -1,18 +1,31 @@
 // src/components/Footer.jsx
 import React from 'react';
+import { Layout, Typography, Divider, Space } from 'antd';
+
+const { Footer: AntFooter } = Layout;
+const { Text, Link } = Typography;
 
 const Footer = () => {
     return (
-        <footer className="bg-gradient-to-r from-blue-500 to-blue-700 text-white text-center py-6 border-t border-blue-800">
+        <AntFooter style={{ backgroundColor: '#003366', color: '#fff', textAlign: 'center' }}>
             <div className="container mx-auto">
-                <p className="text-sm mb-2">&copy; {new Date().getFullYear()} CrisisNet. All rights reserved.</p>
-                <div className="flex justify-center space-x-4">
-                    <a href="/about" className="hover:underline">About</a>
-                    <a href="/privacy" className="hover:underline">Privacy Policy</a>
-                    <a href="/contact" className="hover:underline">Contact</a>
-                </div>
+                <Text type="secondary" style={{ color: '#d4d4d4' }}>
+                    &copy; {new Date().getFullYear()} CrisisNet. All rights reserved.
+                </Text>
+                <Divider style={{ borderColor: '#004080', margin: '12px 0' }} />
+                <Space size="large">
+                    <Link href="/about" style={{ color: '#ffffff', fontWeight: '500' }} underline>
+                        About
+                    </Link>
+                    <Link href="/privacy" style={{ color: '#ffffff', fontWeight: '500' }} underline>
+                        Privacy Policy
+                    </Link>
+                    <Link href="/emergency" style={{ color: '#ffffff', fontWeight: '500' }} underline>
+                        Contact
+                    </Link>
+                </Space>
             </div>
-        </footer>
+        </AntFooter>
     );
 };
 

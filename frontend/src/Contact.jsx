@@ -1,110 +1,113 @@
-// src/components/Contact.jsx
-import React, { useState } from 'react';
-import Header  from './Header'
+// EmergencyContact.jsx
+import React from 'react';
+import HeaderNav from './HeaderNav';
 import Footer from './Footer';
 
-const Contact = () => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [message, setMessage] = useState('');
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
-    const [number, setNumber] = useState();
+const EmergencyContact = () => {
+  const tollFreeNumber = '1800-XYZ-1234';
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError('');
-        setSuccess('');
+  const stateControlRooms = [
+    { state: 'Andhra Pradesh', number: '0863-2345678' },
+    { state: 'Arunachal Pradesh', number: '0360-1234567' },
+    { state: 'Assam', number: '0361-6543210' },
+    { state: 'Bihar', number: '0612-2345678' },
+    { state: 'Chhattisgarh', number: '0771-1234567' },
+    { state: 'Goa', number: '0832-1234567' },
+    { state: 'Gujarat', number: '079-2345678' },
+    { state: 'Haryana', number: '0172-1234567' },
+    { state: 'Himachal Pradesh', number: '0177-2345678' },
+    { state: 'Jharkhand', number: '0651-2345678' },
+    { state: 'Karnataka', number: '080-2345678' },
+    { state: 'Kerala', number: '0471-1234567' },
+    { state: 'Madhya Pradesh', number: '0755-2345678' },
+    { state: 'Maharashtra', number: '022-2345678' },
+    { state: 'Manipur', number: '0385-1234567' },
+    { state: 'Meghalaya', number: '0364-2345678' },
+    { state: 'Mizoram', number: '0389-1234567' },
+    { state: 'Nagaland', number: '0370-2345678' },
+    { state: 'Odisha', number: '0674-1234567' },
+    { state: 'Punjab', number: '0172-2345678' },
+    { state: 'Rajasthan', number: '0141-2345678' },
+    { state: 'Sikkim', number: '03592-123456' },
+    { state: 'Tamil Nadu', number: '044-2345678' },
+    { state: 'Telangana', number: '040-1234567' },
+    { state: 'Tripura', number: '0381-2345678' },
+    { state: 'Uttar Pradesh', number: '0522-1234567' },
+    { state: 'Uttarakhand', number: '0135-2345678' },
+    { state: 'West Bengal', number: '033-1234567' },
+  ];
 
-        // Basic form validation
-        if (!name || !email || !message || !number) {
-            setError('Please fill out all fields.');
-            return;
-        }
+  return (
+    <>
+      <HeaderNav />
+      <div className="min-h-screen bg-blue-50 flex flex-col lg:flex-row p-8 gap-8">
+        
+        <div className="lg:w-1/2 space-y-8">
+          <div className="bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-3xl font-bold text-red-600 mb-4">Report Emergency</h2>
+            <p className="text-xl font-bold text-green-700">Toll-Free: {tollFreeNumber}</p>
+            <p className="text-gray-600 mt-3">
+              For immediate assistance, call the toll-free number. Available 24/7.
+            </p>
+          </div>
 
-        // Simulate a message send process
-        try {
-            // Simulate API call
-            setTimeout(() => {
-                setSuccess('Your message has been sent successfully. We will get back to you shortly.');
-                setName('');
-                setEmail('');
-                setMessage('');
-                setNumber()
-            }, 2000);
-        } catch (error) {
-            setError('Failed to send message. Please try again later.');
-        }
-    };
+          <div className="bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Additional Resources</h2>
+            <ul className="list-disc list-inside text-blue-800 space-y-2">
+              <li>Police Helpline: 100</li>
+              <li>Ambulance Services: 102</li>
+              <li>Disaster Helpline: 108</li>
+              <li>Women’s Helpline: 1091</li>
+              <li>Child Helpline: 1098</li>
+            </ul>
+          </div>
 
-    return (
-        <>
-        <Header />
-        <div className="bg-blue-50 py-16 px-8 text-white">
-            <div className="container mx-auto text-center max-w-2xl">
-                <h2 className="text-3xl font-semibold mb-6 text-black">Need Assistance?</h2>
-                <p className="text-xl mb-6 text-black">Reach out to us immediately, and we’ll respond as quickly as possible.</p>
-                
-                <form onSubmit={handleSubmit} className="bg-white text-gray-800 rounded-lg p-8 shadow-xl">
-                    <div className="mb-4">
-                        <label htmlFor="name" className="block text-lg font-medium mb-2">Your Name</label>
-                        <input
-                            type="text"
-                            id="name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="John Doe"
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label htmlFor="number" className="block text-lg font-medium mb-2">Your Phone No.</label>
-                        <input
-                            type="text"
-                            id="number"
-                            value={number}
-                            onChange={(e) => setNumber(e.target.value)}
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="1234567890"
-                            inputMode="numeric"
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label htmlFor="email" className="block text-lg font-medium mb-2">Your Email</label>
-                        <input
-                            type="email"
-                            id="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="you@example.com"
-                        />
-                    </div>
-                    <div className="mb-6">
-                        <label htmlFor="message" className="block text-lg font-medium mb-2">Your Message</label>
-                        <textarea
-                            id="message"
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Please describe your emergency or request..."
-                            rows="4"
-                        />
-                    </div>
-                    {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
-                    {success && <div className="text-green-500 text-sm mb-4">{success}</div>}
-                    <button
-                        type="submit"
-                        className="w-full py-3 bg-yellow-500 hover:bg-yellow-400 text-white font-semibold rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-600"
-                    >
-                        Send Message
-                    </button>
-                </form>
-            </div>
+          <div className="bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Emergency Preparedness Tips</h2>
+            <ul className="list-disc list-inside text-blue-800 space-y-2">
+              <li>Stay calm and assess your surroundings.</li>
+              <li>Find a safe location and avoid dangerous areas.</li>
+              <li>Keep an emergency kit ready.</li>
+            </ul>
+          </div>
+
+          <div className="bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Nearby Hospitals & Police Stations</h2>
+            <a href="/hospitals" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+                Check for neaby Hospitals & Police Stations
+              </a>
+          </div>
+
+          <div className="bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Volunteer & NGO Support</h2>
+            <p className="text-gray-700">
+              Help your community during an emergency.{" "}
+              <a href="/ngo-public" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+                Sign up to volunteer
+              </a>
+            </p>
+          </div>
+
         </div>
-        <Footer />
-        </>
-    );
+
+        <div className="lg:w-1/2">
+          <div className="bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">State Control Room Numbers</h2>
+            <ul className="divide-y divide-gray-300">
+              {stateControlRooms.map((room) => (
+                <li key={room.state} className="py-2 flex justify-between text-gray-700">
+                  <span className="font-medium">{room.state}</span>
+                  <span className="font-semibold text-red-700">{room.number}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        
+      </div>
+      <Footer />
+    </>
+  );
 };
 
-export default Contact;
+export default EmergencyContact;

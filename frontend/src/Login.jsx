@@ -1,8 +1,11 @@
 // Login.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from './Header';
+import { Form, Input, Button, Typography, Alert, Space } from 'antd';
+import HeaderNav from './HeaderNav';
 import Footer from './Footer';
+
+const { Title, Text } = Typography;
 
 function Login({ setAuth }) {
     const [username, setUsername] = useState('');
@@ -10,12 +13,11 @@ function Login({ setAuth }) {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
+    const handleLogin = async (values) => {
         const response = await fetch('http://127.0.0.1:8000/users/login/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify(values),
         });
         const data = await response.json();
 
@@ -23,7 +25,16 @@ function Login({ setAuth }) {
             localStorage.setItem('accessToken', data.access);
             localStorage.setItem('user', JSON.stringify(data.user));
             setAuth(data.user);
-            navigate('/incident-report');
+            if (data.user.role === 'responder') {
+                navigate('/incident-list');
+            } else if (data.user.role === 'victim') {
+                navigate('/incident-report');
+            } else if(data.user.role === 'admin'){
+                navigate('/dashboard');
+            }
+            else{
+                navigate('/ngo-incidents')
+            }
         } else {
             setError(data.detail || 'Login failed');
         }
@@ -31,41 +42,65 @@ function Login({ setAuth }) {
 
     return (
         <>
-        <Header />
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-            <h2 className="text-3xl font-semibold mb-6">Login</h2>
-            <form onSubmit={handleLogin} className="w-full max-w-md bg-white shadow-md rounded-lg px-8 py-6">
-                <div className="mb-4">
-                    <input
-                        type="text"
-                        placeholder="Username"
-                        onChange={e => setUsername(e.target.value)}
-                        required
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+            <HeaderNav />
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', background: '#f0f2f5' }}>
+            <div style={{ width: '100%', maxWidth: 400, padding: '20px', background: '#fff', borderRadius: '10px', boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}>
+                    <Title level={2} style={{ textAlign: 'center' }}>Login</Title>
+                    <Form
+                        onFinish={handleLogin}
+                        layout="vertical"
+                        initialValues={{ username, password }}
+                    >
+                        {error && <Alert message={error} type="error" showIcon style={{ marginBottom: 16 }} />}
+                        
+                        <Form.Item
+                            label="Username"
+                            name="username"
+                            rules={[{ required: true, message: 'Please input your username!' }]}
+                        >
+                            <Input
+                                value={username}
+                                onChange={e => setUsername(e.target.value)}
+                                placeholder="Enter your username"
+                            />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Password"
+                            name="password"
+                            rules={[{ required: true, message: 'Please input your password!' }]}
+                        >
+                            <Input.Password
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                                placeholder="Enter your password"
+                            />
+                        </Form.Item>
+
+                        <Form.Item>
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                block
+                                size="large"
+                                style={{ backgroundColor: '#1890ff', borderColor: '#1890ff' }}
+                            >
+                                Login
+                            </Button>
+                        </Form.Item>
+
+                        <Space style={{ width: '100%', justifyContent: 'center' }}>
+                            <Text>Don't have an account?</Text>
+                            <Button type="link" onClick={() => navigate('/register')}>
+                                Register here
+                            </Button>
+                        </Space>
+                    </Form>
                 </div>
-                <div className="mb-4">
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        onChange={e => setPassword(e.target.value)}
-                        required
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                </div>
-                <button
-                    type="submit"
-                    className="w-full py-3 text-white bg-blue-500 hover:bg-blue-600 rounded-lg font-semibold transition duration-200"
-                >
-                    Login
-                </button>
-            </form>
-            {error && <p className="text-red-500 mt-4">{error}</p>}
-        </div>
-        <Footer />
+            </div>
+            <Footer />
         </>
     );
-    
 }
 
 export default Login;
