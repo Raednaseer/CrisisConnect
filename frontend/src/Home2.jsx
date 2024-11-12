@@ -24,7 +24,7 @@ const HomePage = () => {
                 {/* Hero Section */}
                 <div style={{padding: '40px', borderRadius: '8px' }}>
                     <Title level={1} style={{ color: '#fff' }}>
-                        CrisisNet: Empowering Responders and Communities
+                        CrisisConnect: Empowering Responders and Communities
                     </Title>
                     <Paragraph style={{ fontSize: '18px', maxWidth: '600px', margin: '0 auto', color:'#fff', textAlign: "center"}}>
                         A platform to connect individuals in need with responders and resources during emergencies.

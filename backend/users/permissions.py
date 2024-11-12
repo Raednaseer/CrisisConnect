@@ -11,3 +11,12 @@ class IsResponder(BasePermission):
 class IsVictim(BasePermission):
     def has_permission(self, request, view):
         return request.user.is_authenticated and request.user.role == 'victim'
+
+class IsNgo(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role == 'ngo'
+
+class IsResponderOrNgo(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.role in ['responder', 'ngo']
+

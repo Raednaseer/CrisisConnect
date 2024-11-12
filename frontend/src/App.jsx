@@ -25,6 +25,7 @@ import Wellness from './Wellness';
 import NearbyTransport from './NearbyTransport';
 import SheltersAdmin from './SheltersAdmin';
 import Responder from './Responders';
+import NgoIncident from './NgoIncidents';
 
 function App() {
     const [auth, setAuth] = useState(null);
@@ -64,6 +65,7 @@ function App() {
               <Route path="/nearby-transport" element={<NearbyTransport />} />
               <Route path="/shelters" element={<SheltersAdmin />} />
               <Route path="/responders" element={<Responder />} />
+              <Route path="/ngo-incidents" element={<NgoIncident />} />
             </Routes>
         </Router>
     );

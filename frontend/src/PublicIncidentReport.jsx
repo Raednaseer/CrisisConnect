@@ -4,6 +4,7 @@ import { Layout, Form, Input, Button, Select, Typography, Row, Col, Card, Divide
 import { EnvironmentOutlined } from '@ant-design/icons';
 import HeaderNav from './HeaderNav';
 import Footer from './Footer';
+import NearbyTransport from './NearbyTransport';
 
 const { Content } = Layout;
 const { Title, Paragraph, Text } = Typography;
@@ -160,9 +161,13 @@ const PublicIncidentReport = () => {
                                     <Paragraph>Loading weather data...</Paragraph>
                                 )}
                             </Card>
+                            <div style={{ position: 'relative', bottom: '0px', right: '525px', width: '1620px', top: '10px' }}>
+                    <NearbyTransport /> 
+                </div>
                         </Col>
                     </Row>
                 </Content>
+                
             </Layout>
             <Footer />
         </>

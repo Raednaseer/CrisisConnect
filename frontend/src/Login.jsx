@@ -29,8 +29,11 @@ function Login({ setAuth }) {
                 navigate('/incident-list');
             } else if (data.user.role === 'victim') {
                 navigate('/incident-report');
-            } else {
+            } else if(data.user.role === 'admin'){
                 navigate('/dashboard');
+            }
+            else{
+                navigate('/ngo-incidents')
             }
         } else {
             setError(data.detail || 'Login failed');

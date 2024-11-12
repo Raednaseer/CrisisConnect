@@ -48,6 +48,14 @@ const Dashboard = () => {
           responder: users.filter((user) => user.role === 'responder').length,
         });
 
+        setLoginData(
+          users.reduce((acc, user) => {
+            const loginDate = new Date(user.last_login).toLocaleDateString();
+            acc[loginDate] = (acc[loginDate] || 0) + 1;
+            return acc;
+          }, {})
+        );
+
         const transportationResponse = await axios.get('http://127.0.0.1:8000/app1/transportation/', { headers });
         const transportations = transportationResponse.data;
         setTotalTransportation(transportations.length);
@@ -96,16 +104,27 @@ const Dashboard = () => {
     xField: 'date',
     yField: 'count',
     xAxis: {
-      tickCount: 5,
-      label: { autoRotate: true },
+      tickCount: 5, 
+      label: {
+        autoRotate: true, 
+      },
     },
-    yAxis: { title: { text: 'Logins' } },
-    columnStyle: { fill: '#597ef7' },
-    columnWidthRatio: 0.4,
+ 
+    yAxis: {
+      title: { text: 'Logins' },
+    },
+    columnStyle: {
+      fill: '#597ef7',
+    },
+    columnWidthRatio: 0.4, 
     height: 350,
-    innerWidth: 300,
-    title: { visible: true, text: 'User Logins by Date' },
+    innerWidth:300,
+    title: {
+      visible: true,
+      text: 'User Logins by Date',
+    },
   };
+ 
 
   return (
     <>
@@ -171,11 +190,10 @@ const Dashboard = () => {
 
       {/* Login Chart and Calendar */}
       <Row gutter={16} style={{ marginBottom: '20px' }}>
-        {/* Login Chart Column */}
-        <Col span={12}>
-          <Title level={4}>Extra</Title>
-          <Column {...loginChartConfig} />
-        </Col>
+    <Col span={12}>
+      <Title level={4}>User Logins by Date</Title>
+      <Column {...loginChartConfig} />
+    </Col>
 
         {/* Calendar Column */}
         <Col span={12}>

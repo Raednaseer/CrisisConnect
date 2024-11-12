@@ -7,7 +7,8 @@ class User(AbstractUser):
         ('victim', 'Victim'),
         ('responder', 'Responder'),
         ('admin', 'Admin'),
-        ('transport','Transport')
+        ('transport','Transport'),
+        ('ngo', 'Ngo')
     ]
     phone_no = models.CharField(max_length=20)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='victim')

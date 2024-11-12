@@ -36,7 +36,7 @@ const Wellness = () => {
         <div className="mb-8 p-6 bg-white shadow-lg rounded-lg">
           <h2 className="text-xl font-bold text-green-700 mb-4">Motivational Thought</h2>
           <p className="text-gray-800 italic">
-            {motivationalThought || (error || 'Loading inspirational thought...')}
+            {motivationalThought || "The mind is like water. When it’s turbulent, it’s difficult to see. When it’s calm, everything becomes clear. – Prasad Mahesh"}
           </p>
         </div>
 
@@ -48,7 +48,7 @@ const Wellness = () => {
           </p>
           <button
             className="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600"
-            onClick={() => window.location.href = 'https://findatherapist.com/'}
+            onClick={() => window.open('https://buddyhelp.org/')}
           >
             Find a Therapist
           </button>

@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from .models import Incident
 from .serializers import (IncidentSerializer,IncidentListSerializer,AssignIncidentSerializer,ResolveIncidentSerializer)
 from rest_framework.permissions import IsAuthenticated
-from users.permissions import IsAdmin,IsVictim,IsResponder
+from users.permissions import IsAdmin,IsVictim,IsResponder,IsNgo,IsResponderOrNgo
 """ from django.core import mail
 from django.conf import settings """
 from rest_framework.decorators import action
@@ -24,7 +24,7 @@ class IncidentViewSet(viewsets.ModelViewSet):
             return ResolveIncidentSerializer
         return IncidentListSerializer
 
-    @action(detail=False, methods=['get'], permission_classes=[IsResponder])
+    @action(detail=False, methods=['get'], permission_classes=[IsResponderOrNgo])
     def reported_incidents(self, request):
         # Custom logic to filter incidents by status 'reported'
         queryset = self.get_queryset().filter(status='reported')

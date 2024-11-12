@@ -12,7 +12,7 @@ const FaqGuide = () => {
         <Layout style={{ backgroundColor: '#EFF6FF' }}>
             {/* Header Section */}
             <HeaderNav />
-            <Title level={2} style={{ color: 'black', margin: 0, textAlign:"center", marginTop:"50px"}}>CrisisNet Safety & FAQ Guide</Title>
+            <Title level={2} style={{ color: 'black', margin: 0, textAlign:"center", marginTop:"50px"}}>CrisisConnect Safety & FAQ Guide</Title>
 
             {/* Content Section */}
             <Content style={{ padding: '40px 20px' }}>
@@ -50,7 +50,7 @@ const FaqGuide = () => {
                             </Col>
                             <Col xs={24} md={12} lg={8}>
                                 <Card title="Wound Care" bordered={false} hoverable>
-                                    <Text>How to clean and dress a wound to prevent infection.</Text>
+                                    <Text>Steps on how to clean and dress a wound to prevent infection.</Text>
                                     <br />
                                     <Link href="https://www.mayoclinic.org/first-aid/first-aid-wounds/faq-20057887" target="_blank" rel="noopener noreferrer">
                                         Wound Care
@@ -59,7 +59,7 @@ const FaqGuide = () => {
                             </Col>
                             <Col xs={24} md={12} lg={8}>
                                 <Card title="Create an Emergency Kit" bordered={false} hoverable>
-                                    <Text>Pack essentials like water, food, and first-aid supplies.</Text>
+                                    <Text>Pack essentials like water, food, and first-aid supplies in an emergency kit.</Text>
                                     <br />
                                     <Link href="https://www.redcross.org/get-help/how-to-prepare-for-emergencies/personal-safety/emergency-kit-checklist.html" target="_blank" rel="noopener noreferrer">
                                         Emergency Kit Checklist
@@ -124,18 +124,18 @@ const FaqGuide = () => {
                         <Divider><Title level={4}>FAQs</Title></Divider>
                         <Row gutter={[24, 24]}>
                             <Col span={24}>
-                                <Card title="What is CrisisNet?" bordered={false}>
-                                    <Text>CrisisNet is a technology-driven emergency coordination system designed to streamline communication and coordination among first responders, victims, and support services during crises.</Text>
+                                <Card title="What is CrisisConnect?" bordered={false}>
+                                    <Text>CrisisConnect is a technology-driven emergency coordination system designed to streamline communication and coordination among first responders, victims, and support services during crises.</Text>
                                 </Card>
                             </Col>
                             <Col span={24}>
                                 <Card title="How can I report an incident?" bordered={false}>
-                                    <Text>Anyone can report an incident through the CrisisNet platform by providing key details. Victims, responders, and citizens can utilize this feature to ensure timely response.</Text>
+                                    <Text>Anyone can report an incident through the CrisisConnect platform by providing key details. Victims, responders, and citizens can utilize this feature to ensure timely response.</Text>
                                 </Card>
                             </Col>
                             <Col span={24}>
                                 <Card title="Where can I learn first aid?" bordered={false}>
-                                    <Text>CrisisNet provides resources on first aid. You can also explore links to the Red Cross and Mayo Clinic for certified courses and resources on emergency care.</Text>
+                                    <Text>CrisisConnect provides resources on first aid. You can also explore links to the Red Cross and Mayo Clinic for certified courses and resources on emergency care.</Text>
                                 </Card>
                             </Col>
                         </Row>
